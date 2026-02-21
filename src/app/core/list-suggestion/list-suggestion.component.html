@@ -1,0 +1,49 @@
+<div class="container">
+  <h1>Liste des suggestions</h1>
+
+  <input
+    type="text"
+    [(ngModel)]="searchTerm"
+    placeholder="Rechercher une suggestion..."
+    class="search-bar"
+  />
+
+  <div class="card" *ngFor="let suggestion of filteredSuggestions">
+
+    <div class="card-header">
+      <h3>{{ suggestion.title }}</h3>
+    </div>
+
+    <!-- Badge statut avec class dynamique -->
+    <span class="badge" [class]="'badge ' + suggestion.status">
+      {{ suggestion.status === 'acceptee' ? 'ACCEPTÉE' :
+         suggestion.status === 'refusee'  ? 'REFUSÉE'  : 'EN ATTENTE' }}
+    </span>
+
+    <div class="card-meta">
+      <span class="category">{{ suggestion.category }}</span>
+      <span class="date">{{ suggestion.date | date: 'd MMM yyyy' }}</span>
+    </div>
+
+    <p class="description">{{ suggestion.description }}</p>
+
+    <!-- NgIf : boutons masqués si refusée -->
+    <div class="actions" *ngIf="suggestion.status !== 'refusee'">
+      <button class="btn-like" (click)="onLike(suggestion)">
+        👍 Like {{ suggestion.nbLikes }}
+      </button>
+      <button class="btn-favorite" (click)="onAddToFavorites(suggestion)">
+        ♡ Ajouter aux favoris
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Section favoris -->
+  <div class="favorites-section" *ngIf="favorites.length > 0">
+    <h2>⭐ Mes Favoris ({{ favorites.length }})</h2>
+    <ul>
+      <li *ngFor="let fav of favorites">{{ fav.title }}</li>
+    </ul>
+  </div>
+</div>
